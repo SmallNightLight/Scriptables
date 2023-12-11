@@ -12,7 +12,7 @@ namespace ScriptableArchitecture.Core
             for (int i = _listeners.Count - 1; i >= 0; i--)
                 _listeners[i].OnEventRaised();
         }
-
+        
         public void RegisterListener(GameEventListenerBase listener)
         {
             if (!_listeners.Contains(listener))

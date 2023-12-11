@@ -410,7 +410,7 @@ using UnityEngine;
 
 namespace ScriptableArchitecture.Data
 {{
-    [CreateAssetMenu(fileName = ""{scriptName}Variable"", menuName = ""Scriptables/Variables/{scriptName}"")]
+    [CreateAssetMenu(fileName = ""{scriptName}Variable"", menuName = ""Scriptables/Variables/{scriptName}"")
     public class {scriptName}Variable : Variable<{type}>
     {{
     }}

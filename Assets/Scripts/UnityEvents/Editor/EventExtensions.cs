@@ -15,6 +15,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Pool;
 using UnityEditorInternal;
+using Unity.VisualScripting;
 
 [CustomPropertyDrawer(typeof(UnityEventBase), true)]
 public class EventExtensions : PropertyDrawer
@@ -39,6 +40,12 @@ public class EventExtensions : PropertyDrawer
         }
     }
 
+    public struct PropertyList
+    {
+
+    }
+
+    //HERE?? a list for SP
     private struct UnityEventFunction
     {
         private readonly SerializedProperty m_Listener;
@@ -50,6 +57,8 @@ public class EventExtensions : PropertyDrawer
             m_validMethodMap = validMethodMap;
         }
 
+        public void FI(float f, int i){ }
+
         public void Assign()
         {
             SerializedProperty serializedProperty = m_Listener.FindPropertyRelative("m_Target");
@@ -60,6 +69,17 @@ public class EventExtensions : PropertyDrawer
             serializedProperty.objectReferenceValue = m_validMethodMap.m_target;
             serializedProperty2.stringValue = m_validMethodMap.m_methodInfo.DeclaringType.AssemblyQualifiedName;
             serializedProperty3.stringValue = m_validMethodMap.m_methodInfo.Name;
+
+            ////Testing
+            //SerializedProperty testProperty = serializedProperty4.Copy();
+            //testProperty.enumValueFlag = (int)m_validMethodMap.m_modes[0] | (int)m_validMethodMap.m_modes[1];
+            //UnityEvent<float, int> hi = new UnityEvent<float, int>();
+            //var v = m_Listener.objectReferenceValue;
+            //hi.AddListener(FI);
+            //hi.SetPersistentListenerState
+            //int erll = hi.GetPersistentEventCount();
+
+
             serializedProperty4.enumValueIndex = (int)m_validMethodMap.m_modes[0]; //not only 0
 
             if (m_validMethodMap.m_modes[0] == PersistentListenerMode.Object) //propably wrong

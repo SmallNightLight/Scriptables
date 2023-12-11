@@ -1,9 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+using ScriptableArchitecture.Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Tes : MonoBehaviour
 {
+    public UnityEvent _event;
+
+    [ContextMenu("AddEvent")]
+    public void AddEvent()
+    {
+        //UnityEventTools.AddObjectPersistentListener(_event, );
+    }
+
+    public void RaiseEvent(EventData dataPoint)
+    {
+
+    }
+
     public void T0(int T1)
     {
         Debug.Log(T1);

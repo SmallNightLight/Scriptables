@@ -6,11 +6,17 @@ namespace ScriptableArchitecture.Core
     public abstract class GameEventListenerBase : MonoBehaviour
     {
         [SerializeField] private GameEventBase _event;
+
+        //1.0 Using simple Unity events
         [SerializeField] private UnityEvent _response;
+
+        //2.0 Using custome events
+        [SerializeField] private ResponseEvent _scriptableResponse;
 
         public void OnEventRaised()
         {
             _response.Invoke();
+            _scriptableResponse.Invoke();
         }
 
         private void OnEnable()
