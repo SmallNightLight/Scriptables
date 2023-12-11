@@ -15,6 +15,11 @@ namespace ScriptableArchitecture.Core
             if (Type == VariableType.ResetOnGameStart)
                 Value = DefaultValue;
         }
+
+        public void Set(T data)
+        {
+            Value = data;
+        }
     }
 
     public abstract class Variable : ScriptableObject

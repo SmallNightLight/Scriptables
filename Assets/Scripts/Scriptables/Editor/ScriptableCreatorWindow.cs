@@ -122,16 +122,24 @@ namespace ScriptableArchitecture.EditorScript
 
             foreach (string assetPath in assetPaths)
             {
-                string fileName = Path.GetFileName(assetPath);
-                fileName = fileName.Substring(0, fileName.Length - fileNameExclude);
-                string fileContents = File.ReadAllText(assetPath);
-
-                if (GUILayout.Button(fileName, GUILayout.MaxWidth(200)))
+                try
                 {
-                    _currentDataWindow = WindowOptions.Content;
-                    _currentScriptName = fileName;
-                    _currentScriptContents = fileContents;
-                    Repaint();
+                    string fileName = Path.GetFileName(assetPath);
+                    fileName = fileName.Substring(0, fileName.Length - fileNameExclude);
+
+                    string fileContents = File.ReadAllText(assetPath);
+
+                    if (GUILayout.Button(fileName, GUILayout.MaxWidth(200)))
+                    {
+                        _currentDataWindow = WindowOptions.Content;
+                        _currentScriptName = fileName;
+                        _currentScriptContents = fileContents;
+                        Repaint();
+                    }
+                }
+                catch
+                {
+
                 }
             }
 
@@ -410,7 +418,7 @@ using UnityEngine;
 
 namespace ScriptableArchitecture.Data
 {{
-    [CreateAssetMenu(fileName = ""{scriptName}Variable"", menuName = ""Scriptables/Variables/{scriptName}"")
+    [CreateAssetMenu(fileName = ""{scriptName}Variable"", menuName = ""Scriptables/Variables/{scriptName}"")]
     public class {scriptName}Variable : Variable<{type}>
     {{
     }}
