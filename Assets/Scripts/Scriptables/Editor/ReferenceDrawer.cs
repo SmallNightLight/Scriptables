@@ -8,6 +8,8 @@ namespace ScriptableArchitecture.EditorScript
     [CustomPropertyDrawer(typeof(Reference<,>), true)]
     public class ReferenceDrawer : PropertyDrawer
     {
+        bool foldoutOpen;
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -70,25 +72,17 @@ namespace ScriptableArchitecture.EditorScript
                 menu.ShowAsContext();
             }
 
-            EditorGUI.EndProperty();
-        }
+            // Draw foldout
+            Rect foldoutRect = new Rect(position.x, position.y, 15f, position.height);
+            foldoutOpen = EditorGUI.Foldout(foldoutRect, foldoutOpen, GUIContent.none);
+            if (foldoutOpen && isVariable && variableProperty.objectReferenceValue != null)
+            {
+                // Additional fields for modifying ScriptableObject directly
+                position.y += EditorGUIUtility.singleLineHeight;
+                EditorGUI.PropertyField(position, variableProperty, new GUIContent("ScriptableObject"));
+            }
 
-        private Type GetTypeFromTypeName(string typeName)
-        {
-            // Handle Unity's specialized types
-            if (typeName.StartsWith("PPtr<$") && typeName.EndsWith(">"))
-            {
-                // Extract the inner type name, e.g., "FloatVariable" from "PPtr<$FloatVariable>"
-                string innerTypeName = typeName.Substring(6, typeName.Length - 7);
-                // Construct the full type name assuming it's in the same namespace
-                //string fullTypeName = $"{typeof(Reference<>).Namespace}.{innerTypeName}";
-                return Type.GetType(innerTypeName);
-            }
-            else
-            {
-                // Default case: use Type.GetType directly
-                return Type.GetType(typeName);
-            }
+            EditorGUI.EndProperty();
         }
     }
 }

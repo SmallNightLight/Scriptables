@@ -215,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _floatReference:
     _isVariable: 1
-    _variable: {fileID: 11400000, guid: 4c5f08051ab46764892d2c53a9b66689, type: 2}
+    _variable: {fileID: 11400000, guid: 755dd0db2547d3542bf2d4100777115f, type: 2}
     _constant: 0
   _transformReference:
     _isVariable: 1
