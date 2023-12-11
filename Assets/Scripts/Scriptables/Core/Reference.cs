@@ -27,7 +27,6 @@ namespace ScriptableArchitecture.Core
                     _constant = value;
                     _isVariable = false;
                 }
-
             }
         }
     }

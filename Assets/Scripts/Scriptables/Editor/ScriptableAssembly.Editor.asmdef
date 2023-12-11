@@ -2,7 +2,8 @@
     "name": "ScriptableAssembly.Editor",
     "rootNamespace": "",
     "references": [
-        "ScriptableAssembly.Core"
+        "ScriptableAssembly.Core",
+        "ScriptableAssembly.Data"
     ],
     "includePlatforms": [
         "Editor"
