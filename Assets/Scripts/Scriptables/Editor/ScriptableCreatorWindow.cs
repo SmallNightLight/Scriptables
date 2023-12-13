@@ -167,27 +167,60 @@ namespace ScriptableArchitecture.EditorScript
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.Space();
+            EditorGUILayout.BeginHorizontal();
+
+            //Script label
             GUILayout.Label(_currentScriptName, EditorStyles.boldLabel);
-            
-            if (GUILayout.Button("Remove"))
-            {
-                RemoveDataPoint(_currentScriptName);
-            }
+            GUILayout.FlexibleSpace();
+
+            //Remove button
+            if (GUILayout.Button("Remove", EditorStyles.miniButtonRight, GUILayout.Width(150)))
+                RemoveDataPointConfirmation(_currentScriptName);
+
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
             GUILayout.Label(_currentScriptContents);
             GUILayout.EndVertical();
         }
 
+        private void RemoveDataPointConfirmation(string baseName)
+        {
+            if (_currentToolbar == 0)
+            {
+                if (EditorUtility.DisplayDialog("Remove Confirmation", $"Are you sure you want to remove the Scriptables of {baseName}? ", "Remove", "Cancel"))
+                {
+                    RemoveScriptables(baseName);
+                }
+            }
+            else
+            {
+                if (EditorUtility.DisplayDialog("Remove Confirmation", $"Are you sure you want to remove {baseName}? ", "Remove", "Cancel"))
+                {
+                    RemoveDataPoint(baseName);
+                    RemoveScriptables(baseName);
+                }
+            }
+        }
+
         private void RemoveDataPoint(string baseName)
         {
+            _currentScriptContents = "";
+
             File.Delete($"{_dataPointsPath}/{baseName}.cs");
             AssetDatabase.Refresh();
         }
 
         private void RemoveScriptables(string baseName)
         {
+            _currentScriptContents = "";
 
+            File.Delete($"{_eventListenersPath}/{baseName}GameEventListener.cs");
+            File.Delete($"{_gameEventsPath}/{baseName}GameEvent.cs");
+            File.Delete($"{_referencesPath}/{baseName}Reference.cs");
+            File.Delete($"{_variablesPath}/{baseName}Variable.cs");
+
+            AssetDatabase.Refresh();
         }
 
         private void GUICreateScriptable()
@@ -198,7 +231,7 @@ namespace ScriptableArchitecture.EditorScript
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button("Create Scriptable", GUILayout.Width(20)))
+            if (GUILayout.Button("Create Scriptable"))
                 CreateScriptable();
 
             GUILayout.EndVertical();
@@ -278,6 +311,8 @@ namespace ScriptableArchitecture.EditorScript
             CreateScript(_gameEventsPath, scriptName + "GameEvent", GetGameEventScript(_scriptableType, scriptName, baseScript));
             CreateScript(_eventListenersPath, scriptName + "GameEventListener", GetGameEventListenerScript(_scriptableType, scriptName, baseScript));
 
+            AssetDatabase.Refresh();
+
             _currentDataWindow = WindowOptions.Content;
             _currentScriptName = _scriptableType.CapitalizeFirstLetter();
             _currentScriptContents = "";
@@ -294,8 +329,13 @@ namespace ScriptableArchitecture.EditorScript
             if (!AssetDatabase.IsValidFolder(folderPath))
                 AssetDatabase.CreateFolder("Assets", folderPath.Replace("Assets/", ""));
 
+            if (File.Exists(scriptFilePath))
+            {
+                Debug.Log($"{scriptName} already exists at {folderPath}");
+                return;
+            }
+
             File.WriteAllText(scriptFilePath, script);
-            AssetDatabase.Refresh();
         }
 
         private void CreateDataPoint()
