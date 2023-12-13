@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _floatReference:
-    _isVariable: 0
+    _isVariable: 1
     _variable: {fileID: 11400000, guid: 4c5f08051ab46764892d2c53a9b66689, type: 2}
     _constant: 0.42
   _transformReference:
@@ -246,7 +246,7 @@ MonoBehaviour:
     Pitch: 0
     Loop: 0
   _soundEffect4:
-    _isVariable: 1
+    _isVariable: 0
     _variable: {fileID: 0}
     _constant:
       audioMixerSnapshot: {fileID: 0}
@@ -255,7 +255,7 @@ MonoBehaviour:
       Pitch: 0
       Loop: 0
   _soundEffect5:
-    _isVariable: 0
+    _isVariable: 1
     _variable: {fileID: 11400000, guid: 6e89ed7f1db19394eaf5526584361d38, type: 2}
     _constant:
       audioMixerSnapshot: {fileID: 0}

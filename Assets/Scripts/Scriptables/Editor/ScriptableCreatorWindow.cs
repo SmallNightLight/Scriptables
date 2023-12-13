@@ -30,6 +30,16 @@ namespace ScriptableArchitecture.EditorScript
         private Vector2 _scrollPositionDataPointCreator;
         private Vector2 _scrollPositionDataPoints;
 
+        #region Folder paths
+
+        const string _dataPointsPath = "Assets/Scripts/Scriptables/Data/DataPoints";
+        const string _eventListenersPath = "Assets/Scripts/Scriptables/Data/EventListeners";
+        const string _gameEventsPath = "Assets/Scripts/Scriptables/Data/GameEvents";
+        const string _referencesPath = "Assets/Scripts/Scriptables/Data/References";
+        const string _variablesPath = "Assets/Scripts/Scriptables/Data/Variables";
+
+        #endregion
+
         private void OnEnable()
         {
             LoadAssemblies();
@@ -55,15 +65,13 @@ namespace ScriptableArchitecture.EditorScript
                 _currentToolbar = newToolbar;
             }
             
-            
-
             if (_currentToolbar == 0)
             {
                 //Display Scriptable Creator Window
 
                 EditorGUILayout.BeginHorizontal();
 
-                GUIWindowList("Scriptables", "Assets/Scripts/Scriptables/Data/Variables", "New Scriptable", _scrollPositionScriptable, 11);
+                GUIWindowList("Scriptables", _variablesPath, "New Scriptable", _scrollPositionScriptable, 11);
 
                 switch (_currentDataWindow)
                 {
@@ -85,7 +93,7 @@ namespace ScriptableArchitecture.EditorScript
 
                 EditorGUILayout.BeginHorizontal();
 
-                GUIWindowList("DataPoints", "Assets/Scripts/Scriptables/Data/DataPoints", "New Datapoint", _scrollPositionDataPoints);
+                GUIWindowList("DataPoints", _dataPointsPath, "New Datapoint", _scrollPositionDataPoints);
 
                 switch (_currentDataWindow)
                 {
@@ -160,9 +168,26 @@ namespace ScriptableArchitecture.EditorScript
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.Space();
             GUILayout.Label(_currentScriptName, EditorStyles.boldLabel);
+            
+            if (GUILayout.Button("Remove"))
+            {
+                RemoveDataPoint(_currentScriptName);
+            }
+
             EditorGUILayout.Space();
             GUILayout.Label(_currentScriptContents);
             GUILayout.EndVertical();
+        }
+
+        private void RemoveDataPoint(string baseName)
+        {
+            File.Delete($"{_dataPointsPath}/{baseName}.cs");
+            AssetDatabase.Refresh();
+        }
+
+        private void RemoveScriptables(string baseName)
+        {
+
         }
 
         private void GUICreateScriptable()
@@ -173,7 +198,7 @@ namespace ScriptableArchitecture.EditorScript
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button("Create Scriptable"))
+            if (GUILayout.Button("Create Scriptable", GUILayout.Width(20)))
                 CreateScriptable();
 
             GUILayout.EndVertical();
@@ -248,10 +273,10 @@ namespace ScriptableArchitecture.EditorScript
 
             string scriptName = _scriptableType.CapitalizeFirstLetter();
 
-            CreateScript("Variables", scriptName + "Variable", GetVariableScript(_scriptableType, scriptName, baseScript));
-            CreateScript("References", scriptName + "Reference", GetReferenceScript(_scriptableType, scriptName, baseScript));
-            CreateScript("GameEvents", scriptName + "GameEvent", GetGameEventScript(_scriptableType, scriptName, baseScript));
-            CreateScript("EventListeners", scriptName + "GameEventListener", GetGameEventListenerScript(_scriptableType, scriptName, baseScript));
+            CreateScript(_variablesPath, scriptName + "Variable", GetVariableScript(_scriptableType, scriptName, baseScript));
+            CreateScript(_referencesPath, scriptName + "Reference", GetReferenceScript(_scriptableType, scriptName, baseScript));
+            CreateScript(_gameEventsPath, scriptName + "GameEvent", GetGameEventScript(_scriptableType, scriptName, baseScript));
+            CreateScript(_eventListenersPath, scriptName + "GameEventListener", GetGameEventListenerScript(_scriptableType, scriptName, baseScript));
 
             _currentDataWindow = WindowOptions.Content;
             _currentScriptName = _scriptableType.CapitalizeFirstLetter();
@@ -262,13 +287,12 @@ namespace ScriptableArchitecture.EditorScript
             _scrollPositionScriptable = Vector2.zero;
         }
 
-        private void CreateScript(string folderName, string scriptName, string script)
+        private void CreateScript(string folderPath, string scriptName, string script)
         {
-            string scriptFolderPath = $"Assets/Scripts/Scriptables/Data/{folderName}";
-            string scriptFilePath = $"{scriptFolderPath}/{scriptName}.cs";
+            string scriptFilePath = $"{folderPath}/{scriptName}.cs";
 
-            if (!AssetDatabase.IsValidFolder(scriptFolderPath))
-                AssetDatabase.CreateFolder("Assets", $"Scripts/Scriptables/Data/{folderName}");
+            if (!AssetDatabase.IsValidFolder(folderPath))
+                AssetDatabase.CreateFolder("Assets", folderPath.Replace("Assets/", ""));
 
             File.WriteAllText(scriptFilePath, script);
             AssetDatabase.Refresh();
@@ -340,11 +364,10 @@ namespace ScriptableArchitecture.EditorScript
 
             scriptTemplate += "    }\n}";
 
-            string scriptFolderPath = "Assets/Scripts/Scriptables/Data/Datapoints";
-            string scriptFilePath = $"{scriptFolderPath}/{_dataPointName}.cs";
+            string scriptFilePath = $"{_dataPointsPath}/{_dataPointName}.cs";
 
-            if (!AssetDatabase.IsValidFolder(scriptFolderPath))
-                AssetDatabase.CreateFolder("Assets", "Scripts/Scriptables/Data/Datapoints");
+            if (!AssetDatabase.IsValidFolder(_dataPointsPath))
+                AssetDatabase.CreateFolder("Assets", _dataPointsPath.Replace("Assets/", "")); 
 
             if (AssetDatabase.LoadAssetAtPath(scriptFilePath, typeof(UnityEngine.Object)) != null)
             {
