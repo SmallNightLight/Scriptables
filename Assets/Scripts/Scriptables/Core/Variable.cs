@@ -4,6 +4,7 @@ namespace ScriptableArchitecture.Core
 {
     public abstract class Variable<T> : Variable
     {
+        [SerializeField]
         public T Value;
         public VariableType Type;
         public T DefaultValue;

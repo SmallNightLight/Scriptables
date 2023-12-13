@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd6e67aff961b5e42bc2d1a7a219fc3b, type: 3}
-  m_Name: FloatVariable
+  m_Script: {fileID: 11500000, guid: 2eb365c20d8da3e44a1b4b5b48046daf, type: 3}
+  m_Name: TransformVariable
   m_EditorClassIdentifier: 
-  Value: 4
+  Value: {fileID: 0}
   Type: 0
-  DefaultValue: 0
+  DefaultValue: {fileID: 0}

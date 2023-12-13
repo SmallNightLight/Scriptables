@@ -219,8 +219,41 @@ MonoBehaviour:
     _constant: 0
   _transformReference:
     _isVariable: 1
-    _variable: {fileID: 0}
+    _variable: {fileID: 11400000, guid: 267dac7b37bc5744f8aa23045cd91145, type: 2}
     _constant: {fileID: 0}
+  _soundEffect:
+    _isVariable: 1
+    _variable: {fileID: 11400000, guid: b099f4349a15ccd49bef421bce5bc249, type: 2}
+    _constant:
+      audioMixerSnapshot: {fileID: 0}
+      AudioClip: {fileID: 0}
+      Volume: 0
+      Pitch: 1.18
+      Loop: 0
+  _soundEffect3:
+    _isVariable: 0
+    _variable: {fileID: 11400000, guid: b099f4349a15ccd49bef421bce5bc249, type: 2}
+    _constant:
+      audioMixerSnapshot: {fileID: 0}
+      AudioClip: {fileID: 0}
+      Volume: 0
+      Pitch: 0
+      Loop: 0
+  _soundEffect2:
+    audioMixerSnapshot: {fileID: 0}
+    AudioClip: {fileID: 0}
+    Volume: 0
+    Pitch: 0
+    Loop: 0
+  _soundEffect4:
+    _isVariable: 1
+    _variable: {fileID: 0}
+    _constant:
+      audioMixerSnapshot: {fileID: 0}
+      AudioClip: {fileID: 0}
+      Volume: 0
+      Pitch: 0
+      Loop: 0
 --- !u!1 &397111917
 GameObject:
   m_ObjectHideFlags: 0
