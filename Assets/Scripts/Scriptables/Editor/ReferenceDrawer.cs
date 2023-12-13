@@ -1,6 +1,5 @@
 using ScriptableArchitecture.Core;
 using System;
-using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,6 +11,7 @@ namespace ScriptableArchitecture.EditorScript
         bool foldoutOpen;
         bool isVariable;
         float height = 18;
+        bool expandedValue;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -45,7 +45,8 @@ namespace ScriptableArchitecture.EditorScript
                     foldoutOpen = EditorGUI.Foldout(foldoutRect, foldoutOpen, GUIContent.none);
                     if (foldoutOpen && isVariable && variableProperty.objectReferenceValue != null)
                     {
-                        Rect valueRect = new Rect(position.x, EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing, position.width - 35, EditorGUIUtility.singleLineHeight);
+                        Rect valueRect = new Rect(0, EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing, EditorGUIUtility.currentViewWidth - 20, EditorGUIUtility.singleLineHeight);
+                        EditorGUI.indentLevel++;
 
                         var valueVariable = variableProperty.objectReferenceValue as Variable;
                         SerializedObject serializedObject = new SerializedObject(valueVariable);
@@ -53,12 +54,15 @@ namespace ScriptableArchitecture.EditorScript
                         
                         EditorGUI.BeginChangeCheck();
 
+                        valueProperty.isExpanded = expandedValue;
                         EditorGUI.PropertyField(valueRect, valueProperty, true);
+                        expandedValue = valueProperty.isExpanded;
 
                         if (EditorGUI.EndChangeCheck())
                             serializedObject.ApplyModifiedProperties();
 
-                        height = EditorGUI.GetPropertyHeight(valueProperty) + EditorGUIUtility.standardVerticalSpacing + 5;
+                        height = EditorGUI.GetPropertyHeight(valueProperty) + EditorGUIUtility.standardVerticalSpacing + 2;
+                        EditorGUI.indentLevel--;
                     }
 
                     position.width -= 15;
@@ -66,36 +70,38 @@ namespace ScriptableArchitecture.EditorScript
                 else
                 {
                     position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-                    Rect valueRect = new Rect(position.x, position.y, position.width - 20f, position.height);
+                    Rect valueRect = new Rect(position.x, position.y, position.width - 72f, position.height);
+
                     EditorGUI.PropertyField(valueRect, variableProperty, GUIContent.none);
+
+                    Rect newRect = new Rect(position.x + position.width - 70f, position.y, 50f, position.height);
+                    if (GUI.Button(newRect, "New", EditorStyles.miniButton))
+                    {
+                        Type newType = GetVariableType(variableProperty.type, out string variableTypeName);
+                        Variable newVariable = ScriptableObject.CreateInstance(newType) as Variable;
+
+                        string path = EditorUtility.SaveFilePanel($"Create new {variableTypeName}", "Assets/Data", variableTypeName, "asset");
+
+                        if (!string.IsNullOrEmpty(path))
+                        {
+                            path = "Assets" + path.Substring(Application.dataPath.Length);
+
+                            AssetDatabase.CreateAsset(newVariable, path);
+                            AssetDatabase.SaveAssets();
+                            AssetDatabase.Refresh();
+
+                            variableProperty.objectReferenceValue = newVariable;
+                            isVariableProperty.boolValue = true;
+                            property.serializedObject.ApplyModifiedProperties();
+                        }
+                    }
                 }
             }
             else
             {
-                var valueVariable = variableProperty.objectReferenceValue;
-                position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-                Rect valueRect = new Rect(position.x, position.y, position.width - 20f, position.height);
-
-                if (valueVariable != null)
-                {
-                    SerializedObject serializedObject = new SerializedObject(valueVariable);
-
-                    if (property.hasVisibleChildren)
-                    {
-                        EditorGUI.PropertyField(valueRect, constantProperty, true);
-                        height = constantProperty.isExpanded ? EditorGUI.GetPropertyHeight(constantProperty, GUIContent.none, true) - EditorGUIUtility.singleLineHeight : 0;
-                    }
-                    else
-                    {
-                        EditorGUI.PropertyField(valueRect, constantProperty, GUIContent.none);
-                        height = 0;
-                    }
-                }
-                else
-                {
-                    EditorGUI.PropertyField(valueRect, constantProperty, GUIContent.none);
-                    height = 0;
-                }
+                Rect valueRect = new Rect(0, 0, position.width - 20f, position.height);
+                EditorGUI.PropertyField(valueRect, constantProperty, new GUIContent(property.displayName), true);
+                height = constantProperty.isExpanded ? EditorGUI.GetPropertyHeight(constantProperty, GUIContent.none, true) - EditorGUIUtility.singleLineHeight : 0;
             }
 
             Rect buttonRect = new Rect(position.x + position.width - 18f, position.y, 18f, position.height);
@@ -115,27 +121,6 @@ namespace ScriptableArchitecture.EditorScript
                 {
                     isVariableProperty.boolValue = true;
                     property.serializedObject.ApplyModifiedProperties();
-                });
-
-                menu.AddItem(new GUIContent("Create New"), false, () =>
-                {
-                    Type newType = GetVariableType(variableProperty.type, out string variableTypeName);
-                    Variable newVariable = ScriptableObject.CreateInstance(newType) as Variable;
-
-                    string path = EditorUtility.SaveFilePanel($"Create new {variableTypeName}", "Assets/Data", "NewVariable", "asset");
-
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        path = "Assets" + path.Substring(Application.dataPath.Length);
-
-                        AssetDatabase.CreateAsset(newVariable, path);
-                        AssetDatabase.SaveAssets();
-                        AssetDatabase.Refresh();
-                        
-                        variableProperty.objectReferenceValue = newVariable;
-                        isVariableProperty.boolValue = true;
-                        property.serializedObject.ApplyModifiedProperties();
-                    }
                 });
 
                 menu.ShowAsContext();

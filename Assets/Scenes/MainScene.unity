@@ -214,24 +214,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _floatReference:
-    _isVariable: 1
-    _variable: {fileID: 11400000, guid: 755dd0db2547d3542bf2d4100777115f, type: 2}
-    _constant: 0
+    _isVariable: 0
+    _variable: {fileID: 11400000, guid: 4c5f08051ab46764892d2c53a9b66689, type: 2}
+    _constant: 0.42
   _transformReference:
-    _isVariable: 1
+    _isVariable: 0
     _variable: {fileID: 11400000, guid: 267dac7b37bc5744f8aa23045cd91145, type: 2}
     _constant: {fileID: 0}
   _soundEffect:
-    _isVariable: 1
+    _isVariable: 0
     _variable: {fileID: 11400000, guid: b099f4349a15ccd49bef421bce5bc249, type: 2}
     _constant:
       audioMixerSnapshot: {fileID: 0}
       AudioClip: {fileID: 0}
-      Volume: 0
+      Volume: 2.31
       Pitch: 1.18
       Loop: 0
   _soundEffect3:
-    _isVariable: 0
+    _isVariable: 1
     _variable: {fileID: 11400000, guid: b099f4349a15ccd49bef421bce5bc249, type: 2}
     _constant:
       audioMixerSnapshot: {fileID: 0}
@@ -252,6 +252,15 @@ MonoBehaviour:
       audioMixerSnapshot: {fileID: 0}
       AudioClip: {fileID: 0}
       Volume: 0
+      Pitch: 0
+      Loop: 0
+  _soundEffect5:
+    _isVariable: 0
+    _variable: {fileID: 11400000, guid: 6e89ed7f1db19394eaf5526584361d38, type: 2}
+    _constant:
+      audioMixerSnapshot: {fileID: 0}
+      AudioClip: {fileID: 0}
+      Volume: 2.8
       Pitch: 0
       Loop: 0
 --- !u!1 &397111917
